@@ -40,3 +40,4 @@ Armazena informação das categorias dos artigos
 * `name` (VARCHAR) - Nome da categoria
 * `slug` (VARCHAR) - Slug da categoria
 * `color` (VARCHAR) - Cor da categoria
+* `created_at` (TIMESTAMP) 
