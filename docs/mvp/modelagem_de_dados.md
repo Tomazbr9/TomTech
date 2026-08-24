@@ -12,6 +12,7 @@ Armazena as credenciais do autor do blog.
 * `name` (VARCHAR) — Nome do autor
 * `email` (VARCHAR, Unique) — E-mail de login
 * `password_hash` (VARCHAR) — Senha criptografada (bcrypt)
+* `role` (VARCHAR) - Papel do usuário
 * `created_at` (TIMESTAMP)
 * `updated_at` (TIMESTAMP)
 

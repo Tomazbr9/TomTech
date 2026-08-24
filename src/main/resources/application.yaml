@@ -1,3 +1,13 @@
 spring:
   application:
     name: tomtech
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tomtech-db
+    username: admin
+    password: pass
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
