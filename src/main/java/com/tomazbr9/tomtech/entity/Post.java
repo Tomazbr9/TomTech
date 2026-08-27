@@ -1,5 +1,6 @@
 package com.tomazbr9.tomtech.entity;
 
+import com.tomazbr9.tomtech.enums.PostStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,7 +25,7 @@ public class Post {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String slug;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -36,8 +37,9 @@ public class Post {
     @Column(nullable = false, name = "cover_image_url")
     private String coverImageUrl;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private boolean published;
+    private PostStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "user_id")

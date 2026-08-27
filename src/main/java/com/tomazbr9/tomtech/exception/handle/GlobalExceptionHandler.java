@@ -1,5 +1,6 @@
 package com.tomazbr9.tomtech.exception.handle;
 
+import com.tomazbr9.tomtech.exception.AccessDeniedException;
 import com.tomazbr9.tomtech.exception.BusinessRuleException;
 import com.tomazbr9.tomtech.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +26,11 @@ public class GlobalExceptionHandler {
             ResourceNotFoundException exception, HttpServletRequest request
     ){
         return buildException(exception, request, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException exception, HttpServletRequest request){
+        return buildException(exception, request, HttpStatus.FORBIDDEN);
     }
 
     private ResponseEntity<ErrorResponse> buildException(
