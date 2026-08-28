@@ -11,3 +11,19 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+aws:
+  region: ${AWS_REGION}
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+
+  s3:
+    bucket:
+      name: tomtech-blog-media
+      url: https://tomtech-blog-media.s3.us-east-2.amazonaws.com/
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET}
+      expiration: 4

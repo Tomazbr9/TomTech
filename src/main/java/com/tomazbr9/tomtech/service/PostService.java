@@ -13,15 +13,22 @@ import com.tomazbr9.tomtech.repository.UserRepository;
 import com.tomazbr9.tomtech.utils.SlugUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class PostService {
+
+    private static final String DEFAULT_COVER =
+            "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600";
 
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
@@ -37,12 +44,14 @@ public class PostService {
         Category category = categoryRepository.findById(request.categoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
 
+        String coverImageUrl = getUrlFirstImageContent(request.content()).orElse(DEFAULT_COVER);
+
         Post post = Post.builder()
                 .title(request.title())
                 .slug(SlugUtils.generateSlug(request.title()))
                 .summary(request.summary())
                 .content(request.content())
-                .coverImageUrl("teste")
+                .coverImageUrl(coverImageUrl)
                 .user(user)
                 .category(category)
                 .status(request.status())
@@ -90,6 +99,23 @@ public class PostService {
         log.info("Artigo arquivado com sucesso: {}", postId);
 
         postRepository.save(post);
+    }
+
+    private Optional<String> getUrlFirstImageContent(String content){
+        Document document = Jsoup.parse(content);
+        Element img = document.selectFirst("img");
+
+        if(img == null){
+            return Optional.empty();
+        }
+
+        String src = img.attr("src");
+
+        if (src.isBlank()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(src);
     }
 
 }
