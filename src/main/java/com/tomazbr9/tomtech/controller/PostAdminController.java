@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/posts")
+@RequestMapping("/api/v1/admin/posts")
 @RequiredArgsConstructor
-public class PostController {
+public class PostAdminController {
 
     private final PostService service;
 

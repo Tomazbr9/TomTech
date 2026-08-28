@@ -2,6 +2,10 @@ spring:
   application:
     name: tomtech
 
+  cors:
+    allowed-origins:
+      - http://localhost:4200
+
   datasource:
     url: jdbc:postgresql://localhost:5432/tomtech-db
     username: admin

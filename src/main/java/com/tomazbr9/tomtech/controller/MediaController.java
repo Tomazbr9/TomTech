@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/media")
+@RequestMapping("/api/v1/admin/media")
 @RequiredArgsConstructor
 public class MediaController {
 

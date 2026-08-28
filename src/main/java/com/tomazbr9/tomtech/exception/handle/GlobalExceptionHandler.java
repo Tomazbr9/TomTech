@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBusinessRuleException(
             BusinessRuleException exception, HttpServletRequest request
     ){
-        log.error("Esta ação fere as regras de negocio", exception);
+        log.warn("Esta ação fere as regras de negocio", exception);
         return buildException(exception, request, HttpStatus.UNPROCESSABLE_CONTENT);
     }
 
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException exception, HttpServletRequest request){
-        log.error("Acesso negado", exception);
+        log.warn("Acesso negado", exception);
         return buildException(exception, request, HttpStatus.FORBIDDEN);
     }
 
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidImageException.class)
     public ResponseEntity<ErrorResponse> handleInvalidImageException(InvalidImageException exception, HttpServletRequest request){
-        log.error("A imagem enviada é inválida", exception);
+        log.warn("A imagem enviada é inválida", exception);
         return buildException(exception, request, HttpStatus.BAD_REQUEST);
     }
 
