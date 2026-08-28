@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public record CreatePostRequest(
         @NotBlank(message = "Titulo do artigo é obrigatório")
-        @Min(value = 5, message = "Titulo do artigo deve ter  no minimo 5 caracters")
+        @Min(value = 5, message = "Titulo do artigo deve ter no minimo 5 caracters")
         String title,
 
         @NotBlank(message = "Resumo do artigo é obrigatório")

@@ -5,7 +5,6 @@ import com.tomazbr9.tomtech.entity.Category;
 import com.tomazbr9.tomtech.entity.Post;
 import com.tomazbr9.tomtech.entity.User;
 import com.tomazbr9.tomtech.enums.PostStatus;
-import com.tomazbr9.tomtech.exception.AccessDeniedException;
 import com.tomazbr9.tomtech.exception.BusinessRuleException;
 import com.tomazbr9.tomtech.exception.ResourceNotFoundException;
 import com.tomazbr9.tomtech.repository.CategoryRepository;
@@ -13,14 +12,15 @@ import com.tomazbr9.tomtech.repository.PostRepository;
 import com.tomazbr9.tomtech.repository.UserRepository;
 import com.tomazbr9.tomtech.utils.SlugUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.Normalizer;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostService {
 
     private final PostRepository postRepository;
@@ -29,6 +29,8 @@ public class PostService {
 
     @Transactional
     public UUID createPost(CreatePostRequest request, UUID userId){
+
+        log.info("Solicitação para criação de Artigo com titulo: {}", request.title());
 
         User user = userRepository.getReferenceById(userId);
 
@@ -48,24 +50,46 @@ public class PostService {
 
         Post savedPost = postRepository.save(post);
 
+        log.info("Artigo criado com sucesso: {}", savedPost.getTitle());
+
         return savedPost.getId();
     }
 
-    public UUID publish(UUID postId, UUID userId){
+    public void publish(UUID postId, UUID userId){
+
+        log.info("Solicitação para publicar artigo: {}", postId);
 
         Post post = postRepository.findByIdAndUserId(postId, userId)
-                .orElseThrow(() -> new AccessDeniedException("Você não tem permissão para publicar esse artigo"));
+                .orElseThrow(() -> new ResourceNotFoundException("Artigo não encontrado"));
 
-        if (post.getStatus().equals(PostStatus.PUBLISHED)){
-            throw new BusinessRuleException("Artigo já publicado!");
+        if (post.getStatus() != PostStatus.DRAFT){
+            throw new BusinessRuleException("Não é possivel publicar artigo com status " + post.getStatus());
         }
 
         post.setStatus(PostStatus.PUBLISHED);
 
+        log.info("Artigo publicado com sucesso: {}", postId);
+
         postRepository.save(post);
 
-        return post.getId();
+    }
 
+    public void archive(UUID postId, UUID userId){
+
+        log.info("Solicitação para arquivar artigo: {}", postId);
+
+        Post post = postRepository.findByIdAndUserId(postId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Artigo não encontrado"));
+
+        if(post.getStatus() != PostStatus.PUBLISHED){
+            throw new BusinessRuleException("Não é possivel publicar artigo com status " + post.getStatus());
+        }
+
+        post.setStatus(PostStatus.ARCHIVED);
+
+        log.info("Artigo arquivado com sucesso: {}", postId);
+
+        postRepository.save(post);
     }
 
 }

@@ -28,11 +28,20 @@ public class PostController {
     }
 
     @PatchMapping("/{id}/publish")
-    public ResponseEntity<UUID> publish(
+    public ResponseEntity<Void> publish(
             @PathVariable UUID postId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        UUID response = service.publish(postId, userDetails.getId());
-        return ResponseEntity.accepted().body(response);
+        service.publish(postId, userDetails.getId());
+        return ResponseEntity.accepted().build();
+    }
+
+    @PatchMapping("/{id}/archive")
+    public ResponseEntity<Void> archive(
+            @PathVariable UUID postId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        service.archive(postId, userDetails.getId());
+        return ResponseEntity.accepted().build();
     }
 }

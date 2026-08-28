@@ -17,8 +17,6 @@ public class CategoryService {
 
     public UUID createCategory(CreateCategoryRequest request){
 
-        System.out.println(request.name());
-
         Category category = Category.builder()
                 .name(request.name())
                 .slug(SlugUtils.generateSlug(request.name()))
