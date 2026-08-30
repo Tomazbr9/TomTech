@@ -1,6 +1,7 @@
 package com.tomazbr9.tomtech.service;
 
 import com.tomazbr9.tomtech.dto.post.CreatePostRequest;
+import com.tomazbr9.tomtech.dto.post.RecoveryPostResponse;
 import com.tomazbr9.tomtech.entity.Category;
 import com.tomazbr9.tomtech.entity.Post;
 import com.tomazbr9.tomtech.entity.User;
@@ -19,6 +20,7 @@ import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -99,6 +101,31 @@ public class PostService {
         log.info("Artigo arquivado com sucesso: {}", postId);
 
         postRepository.save(post);
+    }
+
+    public RecoveryPostResponse getPost(String slug){
+        Post post = postRepository.findBySlug(slug)
+                .orElseThrow(() -> new ResourceNotFoundException("Post não encontrado"));
+
+        return new RecoveryPostResponse(
+                post.getId(),
+                post.getTitle(),
+                post.getSummary(),
+                post.getContent(),
+                post.getCreatedAt()
+        );
+    }
+
+    public List<RecoveryPostResponse> getPosts(){
+        List<Post> posts = postRepository.findAll();
+        return posts.stream()
+                .map(post -> new RecoveryPostResponse(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getSummary(),
+                        post.getContent(),
+                        post.getCreatedAt()
+                )).toList();
     }
 
     private Optional<String> getUrlFirstImageContent(String content){

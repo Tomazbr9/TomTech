@@ -1,6 +1,7 @@
 package com.tomazbr9.tomtech.controller;
 
 import com.tomazbr9.tomtech.dto.post.CreatePostRequest;
+import com.tomazbr9.tomtech.dto.post.RecoveryPostResponse;
 import com.tomazbr9.tomtech.security.UserDetailsImpl;
 import com.tomazbr9.tomtech.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -17,6 +19,12 @@ import java.util.UUID;
 public class PostAdminController {
 
     private final PostService service;
+
+    @GetMapping
+    public ResponseEntity<List< RecoveryPostResponse>> getPosts(){
+        List<RecoveryPostResponse> response = service.getPosts();
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping
     public ResponseEntity<UUID> createPost(

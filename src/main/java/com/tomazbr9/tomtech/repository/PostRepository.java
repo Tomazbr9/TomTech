@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface PostRepository extends JpaRepository<Post, UUID> {
     Optional<Post> findByIdAndUserId(UUID postId, UUID userId);
+    Optional<Post> findBySlug(String slug);
 }
